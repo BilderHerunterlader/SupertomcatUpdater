@@ -2,8 +2,9 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>Updater.jar</jar>
-  <outfile>Updater.exe</outfile>
+  <jar>SupertomcatUpdater.jar</jar>
+  <outfile>SupertomcatUpdater.exe</outfile>
+  <manifest>launch4j.manifest</manifest>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -12,7 +13,6 @@
   <supportUrl></supportUrl>
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
-  <manifest></manifest>
   <icon>UpdaterIcon.ico</icon>
   <jre>
     <path>jre;%JAVA_HOME%;%PATH%</path>

@@ -16,7 +16,7 @@ public final class Updater {
 	 * @param args Arguments
 	 */
 	public static void main(String[] args) {
-		ApplicationMain applicationMain = new ApplicationMain("Updater", null, true, false, Updater.class) {
+		ApplicationMain applicationMain = new ApplicationMain("SupertomcatUpdater", null, true, false, Updater.class) {
 			@Override
 			protected void main(String[] args) {
 				Logger logger = LoggerFactory.getLogger(Updater.class);

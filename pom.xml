@@ -8,7 +8,7 @@
 	</parent>
 	
 	<groupId>ch.supertomcat</groupId>
-	<artifactId>updater</artifactId>
+	<artifactId>supertomcatupdater</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>SupertomcatUpdater</name>
 	<description>Updater for Tools</description>
@@ -18,7 +18,7 @@
 		<executableJarPath>${project.basedir}</executableJarPath>
 		<libsPath>${project.basedir}/lib</libsPath>
 		<!-- Jar Filename -->
-		<jar.finalName>Updater</jar.finalName>
+		<jar.finalName>SupertomcatUpdater</jar.finalName>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<dependencies>
