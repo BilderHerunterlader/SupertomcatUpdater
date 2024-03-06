@@ -1,5 +1,8 @@
 package ch.supertomcat.updater;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -12,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.supertomcat.supertomcatutils.application.ApplicationMain;
 import ch.supertomcat.supertomcatutils.application.ApplicationProperties;
+import ch.supertomcat.updater.selfupdate.SelfUpdate;
 
 /**
  * Class which contains the main-Method
@@ -92,10 +96,10 @@ public final class Updater {
 			// Path programDataFolder = Paths.get(programData, "BilderHerunterlader");
 			// Files.createDirectories(programDataFolder);
 			//
-			// String programFilesFolder = System.getenv("ProgramFiles(x86)");
-			// Path programFolder = Paths.get(programFilesFolder, "BilderHerunterladerTest");
-			// Files.createDirectories(programFolder);
-
+			String programFilesFolder = System.getenv("ProgramFiles(x86)");
+			Path programFolder = Paths.get(programFilesFolder, "BilderHerunterladerTest");
+			SelfUpdate selfUpdate = new SelfUpdate(programFolder);
+			selfUpdate.execute();
 		} catch (Exception e) {
 			logger.error("TestError", e);
 			System.exit(1);
