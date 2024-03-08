@@ -4,52 +4,64 @@
 	<xs:element name="update">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="actions" type="UpdateAction" minOccurs="0" maxOccurs="unbounded" />
+				<xs:choice id="actionChoice" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="cleanDirectory" type="CleanDirectoryActionDefinition" />
+					<xs:element name="extractZipFile" type="ExtractZipFileActionDefinition" />
+					<xs:element name="copyFile" type="CopyFileActionDefinition" />
+					<xs:element name="deleteFile" type="DeleteFileActionDefinition" />
+				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	
-	<!-- Clean Directory -->
-	<xs:complexType name="UpdateAction">
-		<!--
-		TODO Instead of choice create it so that all actions extend this and actions List is loaded with different classes.
-		In XML it should then be possible to just add elements with specific action names
-		-->
-		<xs:choice>
-			<xs:element name="cleanDirectory" type="CleanDirectory"/>
-			<xs:element name="extractZipFile" type="ExtractZipFile"/>
-			<xs:element name="copyFile" type="CopyFile"/>
-			<xs:element name="deleteFile" type="DeleteFile"/>
-		</xs:choice>
+	<!-- Base Type for Actions -->
+	<xs:complexType name="ActionBaseDefinition" abstract="true">
+		<!-- Currently empty, because no elements or attributes needed -->
 	</xs:complexType>
 	
 	<!-- Clean Directory -->
-	<xs:complexType name="CleanDirectory">
-		<!-- Required Directory Path -->
-		<xs:attribute name="directory" type="xs:string" use="required" />
-		<!-- Required Recursive Flag -->
-		<xs:attribute name="recursive" type="xs:boolean" use="required" />
+	<xs:complexType name="CleanDirectoryActionDefinition">
+		<xs:complexContent>
+			<xs:extension base="ActionBaseDefinition">
+				<!-- Required Directory Path -->
+				<xs:attribute name="directory" type="xs:string" use="required" />
+				<!-- Required Recursive Flag -->
+				<xs:attribute name="recursive" type="xs:boolean" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	
 	<!-- Extract Zip File -->
-	<xs:complexType name="ExtractZipFile">
-		<!-- Required Zip File Path -->
-		<xs:attribute name="file" type="xs:string" use="required" />
-		<!-- Required Target Directory Path -->
-		<xs:attribute name="targetDirectory" type="xs:string" use="required" />
+	<xs:complexType name="ExtractZipFileActionDefinition">
+		<xs:complexContent>
+			<xs:extension base="ActionBaseDefinition">
+				<!-- Required Zip File Path -->
+				<xs:attribute name="file" type="xs:string" use="required" />
+				<!-- Required Target Directory Path -->
+				<xs:attribute name="targetDirectory" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	
 	<!-- Copy File -->
-	<xs:complexType name="CopyFile">
-		<!-- Required Source File Path -->
-		<xs:attribute name="sourceFile" type="xs:string" use="required" />
-		<!-- Required Target Directory Path -->
-		<xs:attribute name="targetDirectory" type="xs:string" use="required" />
+	<xs:complexType name="CopyFileActionDefinition">
+		<xs:complexContent>
+			<xs:extension base="ActionBaseDefinition">
+				<!-- Required Source File Path -->
+				<xs:attribute name="sourceFile" type="xs:string" use="required" />
+				<!-- Required Target Directory Path -->
+				<xs:attribute name="targetDirectory" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	
 	<!-- Delete File -->
-	<xs:complexType name="DeleteFile">
-		<!-- Required Source File Path -->
-		<xs:attribute name="file" type="xs:string" use="required" />
+	<xs:complexType name="DeleteFileActionDefinition">
+		<xs:complexContent>
+			<xs:extension base="ActionBaseDefinition">
+				<!-- Required Source File Path -->
+				<xs:attribute name="file" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>
