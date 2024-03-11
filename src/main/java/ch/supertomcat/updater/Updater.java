@@ -116,6 +116,9 @@ public final class Updater {
 	 */
 	private static int update(String xmlFilePath) {
 		Logger logger = LoggerFactory.getLogger(Updater.class);
+		// TODO Read XML File with JAXB
+		// TODO Create Wrapper Objects for all actions
+		// TODO Execute Actions
 		return 0;
 	}
 

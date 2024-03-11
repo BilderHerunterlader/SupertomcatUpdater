@@ -5,7 +5,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:choice id="actionChoice" minOccurs="0" maxOccurs="unbounded">
-					<xs:element name="cleanDirectory" type="CleanDirectoryActionDefinition" />
+					<xs:element name="clearDirectory" type="ClearDirectoryActionDefinition" />
 					<xs:element name="extractZipFile" type="ExtractZipFileActionDefinition" />
 					<xs:element name="copyFile" type="CopyFileActionDefinition" />
 					<xs:element name="deleteFile" type="DeleteFileActionDefinition" />
@@ -19,8 +19,8 @@
 		<!-- Currently empty, because no elements or attributes needed -->
 	</xs:complexType>
 	
-	<!-- Clean Directory -->
-	<xs:complexType name="CleanDirectoryActionDefinition">
+	<!-- Clear Directory -->
+	<xs:complexType name="ClearDirectoryActionDefinition">
 		<xs:complexContent>
 			<xs:extension base="ActionBaseDefinition">
 				<!-- Required Directory Path -->
