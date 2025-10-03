@@ -1,15 +1,16 @@
 package ch.supertomcat.updater;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,7 +149,12 @@ public final class Updater {
 	 * @param options Command Line Options
 	 */
 	private static void printHelp(Options options) {
-		HelpFormatter helpFormatter = new HelpFormatter();
-		helpFormatter.printHelp(ApplicationProperties.getProperty("ApplicationName") + " " + ApplicationProperties.getProperty("ApplicationVersion"), options);
+		try {
+			HelpFormatter helpFormatter = HelpFormatter.builder().get();
+			helpFormatter.printHelp(ApplicationProperties.getProperty("ApplicationName") + " " + ApplicationProperties.getProperty("ApplicationVersion"), "", options, "", false);
+		} catch (IOException e) {
+			Logger logger = LoggerFactory.getLogger(Updater.class);
+			logger.error("Could not print help", e);
+		}
 	}
 }
