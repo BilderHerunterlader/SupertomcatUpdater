@@ -151,7 +151,7 @@ public final class Updater {
 	private static void printHelp(Options options) {
 		try {
 			HelpFormatter helpFormatter = HelpFormatter.builder().get();
-			helpFormatter.printHelp(ApplicationProperties.getProperty("ApplicationName") + " " + ApplicationProperties.getProperty("ApplicationVersion"), "", options, "", false);
+			helpFormatter.printHelp(ApplicationProperties.getProperty(ApplicationMain.APPLICATION_NAME) + " " + ApplicationProperties.getProperty(ApplicationMain.APPLICATION_VERSION), "", options, "", false);
 		} catch (IOException e) {
 			Logger logger = LoggerFactory.getLogger(Updater.class);
 			logger.error("Could not print help", e);

@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.supertomcat.supertomcatutils.application.ApplicationMain;
 import ch.supertomcat.supertomcatutils.application.ApplicationProperties;
 import ch.supertomcat.supertomcatutils.io.DirectoryUtil;
 
@@ -40,7 +41,7 @@ public class SelfUpdate {
 	 * @throws Exception
 	 */
 	public void execute() throws Exception {
-		String updaterApplicationPath = ApplicationProperties.getProperty("ApplicationPath");
+		String updaterApplicationPath = ApplicationProperties.getProperty(ApplicationMain.APPLICATION_PATH);
 		Path updaterApplicationFolder = Paths.get(updaterApplicationPath);
 		logger.info("Self update from '{}' to '{}'", updaterApplicationFolder, targetFolder);
 
