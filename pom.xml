@@ -15,10 +15,7 @@
 	<url>https://github.com/BilderHerunterlader/SupertomcatUpdater.git</url>
 	<properties>
 		<mainClass>ch.supertomcat.updater.Updater</mainClass>
-		<executableJarPath>${project.basedir}</executableJarPath>
 		<libsPath>${project.basedir}/lib</libsPath>
-		<!-- Jar Filename -->
-		<jar.finalName>SupertomcatUpdater</jar.finalName>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<dependencies>
@@ -83,7 +80,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${jar.finalName}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -115,10 +111,9 @@
 						</manifest>
 						<manifestEntries>
 							<Built-By>${project.name}</Built-By>
+							<Enable-Native-Access>ALL-UNNAMED</Enable-Native-Access>
 						</manifestEntries>
 					</archive>
-					<outputDirectory>${executableJarPath}</outputDirectory>
-					<finalName>${jar.finalName}</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -149,6 +144,26 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
+					<execution>
+						<id>copy-project-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<outputDirectory>${project.basedir}</outputDirectory>
+									<destFileName>SupertomcatUpdater.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
 					<execution>
 						<id>copy-dependencies</id>
 						<phase>prepare-package</phase>
