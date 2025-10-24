@@ -100,7 +100,7 @@
 								<artifact>
 									<file>${project.basedir}/Updater.exe</file>
 									<type>exe</type>
-									<classifier>window-exe</classifier>
+									<classifier>windows-exe</classifier>
 								</artifact>
 							</artifacts>
 						</configuration>

@@ -132,6 +132,15 @@ public final class Updater {
 	private static int update(String xmlFilePath) {
 		Logger logger = LoggerFactory.getLogger(Updater.class);
 		try {
+			/*
+			 * Wait some time to give the application, which launched the update some time to exit
+			 */
+			try {
+				Thread.sleep(20 * 1000L);
+			} catch (InterruptedException e) {
+				logger.error("Sleep was interrupted", e);
+			}
+
 			Path xmlFile = Paths.get(xmlFilePath);
 			UpdateXmlIO updateXmlIO = new UpdateXmlIO();
 			/*
