@@ -15,7 +15,6 @@
 	<properties>
 		<mainClass>ch.supertomcat.updater.Updater</mainClass>
 		<libsPath>${project.basedir}/lib</libsPath>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<dependencies>
 		<dependency>
