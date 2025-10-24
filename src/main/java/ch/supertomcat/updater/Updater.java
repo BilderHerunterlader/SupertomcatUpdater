@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.WindowConstants;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -145,6 +147,8 @@ public final class Updater {
 			images.add(Icons.getImage("/ch/supertomcat/updater/icons/256x256/Updater.png"));
 			progressWindow.setIconImages(images);
 			progressWindow.progressModeChanged(true);
+			progressWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			progressWindow.setVisible(true);
 			/*
 			 * Wait some time to give the application, which launched the update some time to exit
 			 */
