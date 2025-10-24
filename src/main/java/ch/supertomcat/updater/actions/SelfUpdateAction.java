@@ -49,4 +49,9 @@ public class SelfUpdateAction extends UpdateActionBase<SelfUpdateActionDefinitio
 		logger.info("Copy '{}' to '{}'", jarFile, targetJarFile);
 		Files.copy(jarFile, targetJarFile, StandardCopyOption.REPLACE_EXISTING);
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Self Update to: " + definition.getTargetDirectory();
+	}
 }

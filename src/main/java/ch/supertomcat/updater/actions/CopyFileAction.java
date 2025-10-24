@@ -30,4 +30,9 @@ public class CopyFileAction extends UpdateActionBase<CopyFileActionDefinition> {
 		logger.info("Copy file from '{}' to '{}'", sourceFile, targetFile);
 		Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Copy file from " + definition.getSourceFile() + " to " + definition.getTargetDirectory();
+	}
 }

@@ -46,4 +46,9 @@ public class CopyDirectoryAction extends UpdateActionBase<CopyDirectoryActionDef
 			}
 		}
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Copy directory from " + definition.getSourceDirectory() + " to " + definition.getTargetDirectory();
+	}
 }

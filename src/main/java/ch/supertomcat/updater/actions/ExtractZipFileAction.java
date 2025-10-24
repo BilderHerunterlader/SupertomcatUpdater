@@ -26,4 +26,9 @@ public class ExtractZipFileAction extends UpdateActionBase<ExtractZipFileActionD
 		Path targetDirectory = Paths.get(definition.getTargetDirectory());
 		ZipUtil.extractZipFile(zipFile, targetDirectory);
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Extract Zip File " + definition.getFile() + " to " + definition.getTargetDirectory();
+	}
 }

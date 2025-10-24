@@ -1,8 +1,10 @@
 package ch.supertomcat.updater;
 
+import java.awt.Image;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import ch.supertomcat.supertomcatutils.application.ApplicationMain;
 import ch.supertomcat.supertomcatutils.application.ApplicationProperties;
+import ch.supertomcat.supertomcatutils.gui.Icons;
+import ch.supertomcat.supertomcatutils.gui.progress.ProgressWindow;
 import ch.supertomcat.updater.actions.ClearDirectoryAction;
 import ch.supertomcat.updater.actions.CopyDirectoryAction;
 import ch.supertomcat.updater.actions.CopyFileAction;
@@ -131,7 +135,16 @@ public final class Updater {
 	 */
 	private static int update(String xmlFilePath) {
 		Logger logger = LoggerFactory.getLogger(Updater.class);
+		ProgressWindow progressWindow = new ProgressWindow("Installing Update", null, false);
 		try {
+			List<Image> images = new ArrayList<>();
+			images.add(Icons.getImage("/ch/supertomcat/updater/icons/16x16/Updater.png"));
+			images.add(Icons.getImage("/ch/supertomcat/updater/icons/32x32/Updater.png"));
+			images.add(Icons.getImage("/ch/supertomcat/updater/icons/64x64/Updater.png"));
+			images.add(Icons.getImage("/ch/supertomcat/updater/icons/128x128/Updater.png"));
+			images.add(Icons.getImage("/ch/supertomcat/updater/icons/256x256/Updater.png"));
+			progressWindow.setIconImages(images);
+			progressWindow.progressModeChanged(true);
 			/*
 			 * Wait some time to give the application, which launched the update some time to exit
 			 */
@@ -174,12 +187,15 @@ public final class Updater {
 				if (action == null) {
 					throw new UpdaterException("Unsupported update action");
 				}
+				progressWindow.progressChanged(action.getProgressString());
 				action.execute();
 			}
 			return 0;
 		} catch (Exception e) {
 			logger.error("Update failed. XMLFile: {}", xmlFilePath, e);
 			return 1;
+		} finally {
+			progressWindow.dispose();
 		}
 	}
 

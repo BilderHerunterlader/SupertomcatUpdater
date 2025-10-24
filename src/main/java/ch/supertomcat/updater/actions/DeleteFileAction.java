@@ -25,4 +25,9 @@ public class DeleteFileAction extends UpdateActionBase<DeleteFileActionDefinitio
 		logger.info("Delete file: {}", fileToDelete);
 		Files.deleteIfExists(fileToDelete);
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Delete File: " + definition.getFile();
+	}
 }

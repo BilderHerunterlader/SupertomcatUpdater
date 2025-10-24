@@ -26,4 +26,9 @@ public class StartProcessAction extends UpdateActionBase<StartProcessActionDefin
 		}
 		processBuilder.start();
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Start Process: " + String.join(" ", definition.getCommand());
+	}
 }

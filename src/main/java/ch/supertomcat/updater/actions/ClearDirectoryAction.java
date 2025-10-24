@@ -41,4 +41,9 @@ public class ClearDirectoryAction extends UpdateActionBase<ClearDirectoryActionD
 			}
 		}
 	}
+
+	@Override
+	public String getProgressString() {
+		return "Clear directory: " + definition.getDirectory();
+	}
 }

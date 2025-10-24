@@ -21,4 +21,9 @@ public interface UpdateAction<T extends ActionBaseDefinition> {
 	 * @return definition
 	 */
 	public T getDefinition();
+
+	/**
+	 * @return Progress String
+	 */
+	public String getProgressString();
 }
