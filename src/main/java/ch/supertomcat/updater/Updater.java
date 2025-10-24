@@ -147,6 +147,7 @@ public final class Updater {
 			images.add(Icons.getImage("/ch/supertomcat/updater/icons/256x256/Updater.png"));
 			progressWindow.setIconImages(images);
 			progressWindow.progressModeChanged(true);
+			progressWindow.progressChanged("Installing update...");
 			progressWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 			progressWindow.setVisible(true);
 			/*
