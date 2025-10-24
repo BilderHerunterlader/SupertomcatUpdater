@@ -2,7 +2,7 @@
 Updater for Tools
 
 # Requirements
-Java 11 is required.
+Java 21 is required.
 
 # License
 This library is licensed under the Apache Software License, version 2.0.
