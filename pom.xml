@@ -7,7 +7,6 @@
 		<version>1.1.5</version>
 	</parent>
 	
-	<groupId>ch.supertomcat</groupId>
 	<artifactId>supertomcatupdater</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>SupertomcatUpdater</name>
@@ -42,7 +41,12 @@
 		<dependency>
 			<groupId>com.github.bilderherunterlader</groupId>
 			<artifactId>supertomcatutils</artifactId>
-			<version>2.0.8</version>
+			<version>2.0.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.bilderherunterlader</groupId>
+			<artifactId>supertomcatupdaterxml</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -86,17 +90,26 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>generate-sources</phase>
+						<id>attach-exe</id>
+						<phase>package</phase>
 						<goals>
-							<goal>add-source</goal>
+							<goal>attach-artifact</goal>
 						</goals>
 						<configuration>
-							<sources>
-								<source>src/generated/java</source>
-							</sources>
+							<artifacts>
+								<artifact>
+									<file>${project.basedir}/Updater.exe</file>
+									<type>exe</type>
+									<classifier>window-exe</classifier>
+								</artifact>
+							</artifacts>
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -118,25 +131,24 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>${mainClass}</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
 				<executions>
 					<execution>
-						<id>clean-lib-dir</id>
-						<phase>prepare-package</phase>
+						<id>make-assembly</id>
+						<phase>package</phase>
 						<goals>
-							<goal>clean</goal>
+							<goal>single</goal>
 						</goals>
-						<configuration>
-							<excludeDefaultDirectories>true</excludeDefaultDirectories>
-							<filesets>
-								<filesets>
-									<directory>${libsPath}</directory>
-									<includes>
-										<include>*.jar</include>
-									</includes>
-								</filesets>
-							</filesets>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -157,27 +169,23 @@
 									<artifactId>${project.artifactId}</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
+									<classifier>jar-with-dependencies</classifier>
 									<outputDirectory>${project.basedir}</outputDirectory>
-									<destFileName>SupertomcatUpdater.jar</destFileName>
+									<destFileName>Updater.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
 							<overWriteIfNewer>true</overWriteIfNewer>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${libsPath}</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-						</configuration>
-					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -187,14 +195,4 @@
 		<developerConnection>scm:git:https://github.com/BilderHerunterlader/SupertomcatUpdater.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
-	<distributionManagement>
-		<repository>
-			<id>bh-maven-repo</id>
-			<url>file://${project.basedir}/../_Maven_Repo</url>
-		</repository>
-		<snapshotRepository>
-			<id>bh-maven-repo</id>
-			<url>file://${project.basedir}/../_Maven_Repo</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>

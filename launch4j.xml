@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>SupertomcatUpdater.jar</jar>
-  <outfile>SupertomcatUpdater.exe</outfile>
+  <jar>Updater.jar</jar>
+  <outfile>Updater.exe</outfile>
   <manifest>launch4j.manifest</manifest>
   <errTitle></errTitle>
   <cmdLine></cmdLine>

@@ -3,6 +3,8 @@ package ch.supertomcat.updater;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -16,7 +18,24 @@ import org.slf4j.LoggerFactory;
 
 import ch.supertomcat.supertomcatutils.application.ApplicationMain;
 import ch.supertomcat.supertomcatutils.application.ApplicationProperties;
-import ch.supertomcat.updater.selfupdate.SelfUpdate;
+import ch.supertomcat.updater.actions.ClearDirectoryAction;
+import ch.supertomcat.updater.actions.CopyDirectoryAction;
+import ch.supertomcat.updater.actions.CopyFileAction;
+import ch.supertomcat.updater.actions.DeleteFileAction;
+import ch.supertomcat.updater.actions.ExtractZipFileAction;
+import ch.supertomcat.updater.actions.SelfUpdateAction;
+import ch.supertomcat.updater.actions.StartProcessAction;
+import ch.supertomcat.updater.actions.UpdateActionBase;
+import ch.supertomcat.updaterxml.UpdateXmlIO;
+import ch.supertomcat.updaterxml.update.xml.ActionBaseDefinition;
+import ch.supertomcat.updaterxml.update.xml.ClearDirectoryActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.CopyDirectoryActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.CopyFileActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.DeleteFileActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.ExtractZipFileActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.SelfUpdateActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.StartProcessActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.Update;
 
 /**
  * Class which contains the main-Method
@@ -33,7 +52,7 @@ public final class Updater {
 			@Override
 			protected void main(String[] args) {
 				Logger logger = LoggerFactory.getLogger(Updater.class);
-				logger.info("Test");
+				logger.info("Started updater with argument: {}", Arrays.toString(args));
 
 				Options options = createCommandLineOptions();
 				CommandLineParser parser = new DefaultParser();
@@ -93,20 +112,15 @@ public final class Updater {
 	private static int selfUpdate(String targetFolderPath) {
 		Logger logger = LoggerFactory.getLogger(Updater.class);
 		try {
-			// String programData = System.getenv("ProgramData");
-			// Path programDataFolder = Paths.get(programData, "BilderHerunterlader");
-			// Files.createDirectories(programDataFolder);
-			//
-			String programFilesFolder = System.getenv("ProgramFiles(x86)");
-			Path programFolder = Paths.get(programFilesFolder, "BilderHerunterladerTest");
-			SelfUpdate selfUpdate = new SelfUpdate(programFolder);
-			selfUpdate.execute();
+			SelfUpdateActionDefinition definition = new SelfUpdateActionDefinition();
+			definition.setTargetDirectory(targetFolderPath);
+			SelfUpdateAction action = new SelfUpdateAction(definition);
+			action.execute();
+			return 0;
 		} catch (Exception e) {
-			logger.error("TestError", e);
-			System.exit(1);
+			logger.error("Self Update failed", e);
+			return 1;
 		}
-
-		return 0;
 	}
 
 	/**
@@ -117,10 +131,47 @@ public final class Updater {
 	 */
 	private static int update(String xmlFilePath) {
 		Logger logger = LoggerFactory.getLogger(Updater.class);
-		// TODO Read XML File with JAXB
-		// TODO Create Wrapper Objects for all actions
-		// TODO Execute Actions
-		return 0;
+		try {
+			Path xmlFile = Paths.get(xmlFilePath);
+			UpdateXmlIO updateXmlIO = new UpdateXmlIO();
+			/*
+			 * For backward/forward compatibility don't validate
+			 */
+			Update update = updateXmlIO.readUpdate(xmlFile, false);
+
+			List<UpdateActionBase<? extends ActionBaseDefinition>> actions = update.getActions().stream().map(x -> {
+				switch (x) {
+					case ClearDirectoryActionDefinition definition:
+						return new ClearDirectoryAction(definition);
+					case CopyDirectoryActionDefinition definition:
+						return new CopyDirectoryAction(definition);
+					case CopyFileActionDefinition definition:
+						return new CopyFileAction(definition);
+					case DeleteFileActionDefinition definition:
+						return new DeleteFileAction(definition);
+					case ExtractZipFileActionDefinition definition:
+						return new ExtractZipFileAction(definition);
+					case SelfUpdateActionDefinition definition:
+						return new SelfUpdateAction(definition);
+					case StartProcessActionDefinition definition:
+						return new StartProcessAction(definition);
+					default:
+						logger.error("Unsupported type: {}", x);
+						return null;
+				}
+			}).toList();
+
+			for (UpdateActionBase<? extends ActionBaseDefinition> action : actions) {
+				if (action == null) {
+					throw new UpdaterException("Unsupported update action");
+				}
+				action.execute();
+			}
+			return 0;
+		} catch (Exception e) {
+			logger.error("Update failed. XMLFile: {}", xmlFilePath, e);
+			return 1;
+		}
 	}
 
 	/**
@@ -151,7 +202,8 @@ public final class Updater {
 	private static void printHelp(Options options) {
 		try {
 			HelpFormatter helpFormatter = HelpFormatter.builder().get();
-			helpFormatter.printHelp(ApplicationProperties.getProperty(ApplicationMain.APPLICATION_NAME) + " " + ApplicationProperties.getProperty(ApplicationMain.APPLICATION_VERSION), "", options, "", false);
+			helpFormatter.printHelp(ApplicationProperties.getProperty(ApplicationMain.APPLICATION_NAME) + " "
+					+ ApplicationProperties.getProperty(ApplicationMain.APPLICATION_VERSION), "", options, "", false);
 		} catch (IOException e) {
 			Logger logger = LoggerFactory.getLogger(Updater.class);
 			logger.error("Could not print help", e);

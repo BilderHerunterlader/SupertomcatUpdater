@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import ch.supertomcat.bh.update.xml.DeleteFileActionDefinition;
+import ch.supertomcat.updaterxml.update.xml.DeleteFileActionDefinition;
 
 /**
  * Delete File Action
@@ -21,10 +21,8 @@ public class DeleteFileAction extends UpdateActionBase<DeleteFileActionDefinitio
 
 	@Override
 	public void execute() throws Exception {
-		// TODO Logging
-
 		Path fileToDelete = Paths.get(definition.getFile());
-		Files.delete(fileToDelete);
-		// TODO Implement
+		logger.info("Delete file: {}", fileToDelete);
+		Files.deleteIfExists(fileToDelete);
 	}
 }

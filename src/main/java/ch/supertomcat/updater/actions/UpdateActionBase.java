@@ -1,13 +1,21 @@
 package ch.supertomcat.updater.actions;
 
-import ch.supertomcat.bh.update.xml.ActionBaseDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ch.supertomcat.updaterxml.update.xml.ActionBaseDefinition;
 
 /**
  * Base class for update actions
  * 
  * @param <T> Update Action Type
  */
-public abstract class UpdateActionBase<T extends ActionBaseDefinition> implements UpdateAction {
+public abstract class UpdateActionBase<T extends ActionBaseDefinition> implements UpdateAction<T> {
+	/**
+	 * Logger
+	 */
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+
 	/**
 	 * Definition
 	 */
@@ -20,5 +28,10 @@ public abstract class UpdateActionBase<T extends ActionBaseDefinition> implement
 	 */
 	public UpdateActionBase(T definition) {
 		this.definition = definition;
+	}
+
+	@Override
+	public T getDefinition() {
+		return definition;
 	}
 }
