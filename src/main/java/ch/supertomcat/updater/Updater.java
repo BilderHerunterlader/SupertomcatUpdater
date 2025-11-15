@@ -1,5 +1,6 @@
 package ch.supertomcat.updater;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -54,7 +55,8 @@ public final class Updater {
 	 * @param args Arguments
 	 */
 	public static void main(String[] args) {
-		ApplicationMain applicationMain = new ApplicationMain("SupertomcatUpdater", null, true, false, Updater.class) {
+		boolean gui = !GraphicsEnvironment.isHeadless();
+		ApplicationMain applicationMain = new ApplicationMain("SupertomcatUpdater", null, gui, false, Updater.class) {
 			@Override
 			protected void main(String[] args) {
 				Logger logger = LoggerFactory.getLogger(Updater.class);
@@ -137,19 +139,24 @@ public final class Updater {
 	 */
 	private static int update(String xmlFilePath) {
 		Logger logger = LoggerFactory.getLogger(Updater.class);
-		ProgressWindow progressWindow = new ProgressWindow("Installing Update", null, false);
+		ProgressWindow progressWindow = null;
+		if (!GraphicsEnvironment.isHeadless()) {
+			progressWindow = new ProgressWindow("Installing Update", null, false);
+		}
 		try {
-			List<Image> images = new ArrayList<>();
-			images.add(Icons.getImage("/ch/supertomcat/updater/icons/16x16/Updater.png"));
-			images.add(Icons.getImage("/ch/supertomcat/updater/icons/32x32/Updater.png"));
-			images.add(Icons.getImage("/ch/supertomcat/updater/icons/64x64/Updater.png"));
-			images.add(Icons.getImage("/ch/supertomcat/updater/icons/128x128/Updater.png"));
-			images.add(Icons.getImage("/ch/supertomcat/updater/icons/256x256/Updater.png"));
-			progressWindow.setIconImages(images);
-			progressWindow.progressModeChanged(true);
-			progressWindow.progressChanged("Installing update...");
-			progressWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-			progressWindow.setVisible(true);
+			if (progressWindow != null) {
+				List<Image> images = new ArrayList<>();
+				images.add(Icons.getImage("/ch/supertomcat/updater/icons/16x16/Updater.png"));
+				images.add(Icons.getImage("/ch/supertomcat/updater/icons/32x32/Updater.png"));
+				images.add(Icons.getImage("/ch/supertomcat/updater/icons/64x64/Updater.png"));
+				images.add(Icons.getImage("/ch/supertomcat/updater/icons/128x128/Updater.png"));
+				images.add(Icons.getImage("/ch/supertomcat/updater/icons/256x256/Updater.png"));
+				progressWindow.setIconImages(images);
+				progressWindow.progressModeChanged(true);
+				progressWindow.progressChanged("Installing update...");
+				progressWindow.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+				progressWindow.setVisible(true);
+			}
 			/*
 			 * Wait some time to give the application, which launched the update some time to exit
 			 */
@@ -192,7 +199,9 @@ public final class Updater {
 				if (action == null) {
 					throw new UpdaterException("Unsupported update action");
 				}
-				progressWindow.progressChanged(action.getProgressString());
+				if (progressWindow != null) {
+					progressWindow.progressChanged(action.getProgressString());
+				}
 				action.execute();
 			}
 			return 0;
@@ -200,7 +209,9 @@ public final class Updater {
 			logger.error("Update failed. XMLFile: {}", xmlFilePath, e);
 			return 1;
 		} finally {
-			progressWindow.dispose();
+			if (progressWindow != null) {
+				progressWindow.dispose();
+			}
 		}
 	}
 
