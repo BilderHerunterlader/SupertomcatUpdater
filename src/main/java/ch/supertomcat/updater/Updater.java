@@ -124,6 +124,7 @@ public final class Updater {
 			definition.setTargetDirectory(targetFolderPath);
 			SelfUpdateAction action = new SelfUpdateAction(definition);
 			action.execute();
+			logger.info("Self Update finished");
 			return 0;
 		} catch (Exception e) {
 			logger.error("Self Update failed", e);
@@ -204,6 +205,7 @@ public final class Updater {
 				}
 				action.execute();
 			}
+			logger.info("Update finished");
 			return 0;
 		} catch (Exception e) {
 			logger.error("Update failed. XMLFile: {}", xmlFilePath, e);
