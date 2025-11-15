@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>supertomcatupdater</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>SupertomcatUpdater</name>
 	<description>Updater for Tools</description>
 	<url>https://github.com/BilderHerunterlader/SupertomcatUpdater.git</url>
@@ -192,6 +192,6 @@
 		<url>https://github.com/BilderHerunterlader/SupertomcatUpdater.git</url>
 		<connection>scm:git:https://github.com/BilderHerunterlader/SupertomcatUpdater.git</connection>
 		<developerConnection>scm:git:https://github.com/BilderHerunterlader/SupertomcatUpdater.git</developerConnection>
-		<tag>supertomcatupdater-1.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 </project>
